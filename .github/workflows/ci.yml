@@ -1,6 +1,7 @@
-# Build, test and deploy. Pull requests build and test, and upload the resume PDF as an
-# artifact. Pushes to main (and manual runs on main) do the same, then deploy dist/ to
-# the `jeremytondo-com` Worker.
+# Build, test and deploy. Pull requests build and test, upload the resume PDF as an
+# artifact, and upload a preview version of the `jeremytondo-com` Worker whose URLs are
+# posted as a PR comment. Pushes to main (and manual runs on main) build and test, then
+# deploy dist/ to production.
 # Builds run here rather than in Cloudflare Workers Builds because the PDF step needs
 # Chromium's system libraries, which only an image with root (apt) can install.
 name: CI
@@ -24,6 +25,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write # the preview comment
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
@@ -62,6 +66,70 @@ jobs:
           path: dist/resume/*.pdf
           if-no-files-found: error
           retention-days: 14
+
+      # A new Worker version that serves no production traffic, reachable at a per-commit URL
+      # and at a per-branch alias (<branch>-jeremytondo-com.<subdomain>.workers.dev) that
+      # Wrangler derives from WORKERS_CI_BRANCH, as Workers Builds does. Skipped for PRs
+      # from forks, which don't get the secrets.
+      - name: Upload preview version
+        id: preview
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          npx wrangler versions upload --message "PR #$PR_NUMBER @ ${HEAD_SHA:0:7}"
+          jq -r 'select(.type == "version-upload")
+            | "version_url=\(.preview_url // "")", "alias_url=\(.preview_alias_url // "")"' \
+            "$WRANGLER_OUTPUT_FILE_PATH" >> "$GITHUB_OUTPUT"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_CI_GENERATE_PREVIEW_ALIAS: 'true'
+          WORKERS_CI_BRANCH: ${{ github.head_ref }}
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+      # One comment per PR, edited in place on each push.
+      - name: Comment preview URLs
+        if: steps.preview.outcome == 'success'
+        run: |
+          marker='<!-- preview-deploy -->'
+          pdf=$(basename dist/resume/*.pdf)
+          if [ -n "$ALIAS_URL" ]; then
+            body="$marker
+          ### Preview
+
+          | | |
+          | --- | --- |
+          | Branch | $ALIAS_URL |
+          | This commit (\`${HEAD_SHA:0:7}\`) | $VERSION_URL |
+          | Resume | $ALIAS_URL/resume/ |
+          | Resume PDF | $ALIAS_URL/resume/$pdf |
+
+          The branch URL always serves the latest push to this PR."
+          else
+            body="$marker
+          ### Preview
+
+          Uploaded a preview version for \`${HEAD_SHA:0:7}\`, but Cloudflare returned no preview URL.
+          Turn on **Preview URLs** for the Worker (Settings → Domains & Routes)."
+          fi
+          id=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --paginate \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -n1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" -f body="$body" > /dev/null
+          else
+            gh api "repos/$REPO/issues/$PR_NUMBER/comments" -f body="$body" > /dev/null
+          fi
+          echo "$body" | tail -n +2 >> "$GITHUB_STEP_SUMMARY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          ALIAS_URL: ${{ steps.preview.outputs.alias_url }}
+          VERSION_URL: ${{ steps.preview.outputs.version_url }}
 
       - name: Deploy to Cloudflare Workers
         # Pushes to main, or a manual run on main (to redeploy without a commit).

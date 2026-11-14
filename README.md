@@ -70,7 +70,13 @@ libraries and has no root to install them.
 
 - **Pull requests:** `npm test` and `npm run build`. The resume PDF is uploaded as the
   `resume-pdf` artifact on the run's summary page (kept 14 days) so you can check it before
-  merging.
+  merging. `wrangler versions upload` then uploads a preview version that serves no production
+  traffic, and a PR comment (updated on each push) links to it:
+  - a branch URL, `<branch>-jeremytondo-com.<subdomain>.workers.dev`, that always serves the
+    branch's latest push;
+  - a URL for that one commit.
+
+  PRs from forks skip the preview, since they don't get the repo secrets.
 - **Push to `main`:** the same, then `npx wrangler deploy` publishes `dist/`. To redeploy
   without a commit, run the workflow by hand on `main` (Actions → CI → Run workflow).
 
@@ -83,6 +89,9 @@ One-time setup:
 - Repo secrets `CLOUDFLARE_API_TOKEN` (an API token with **Account → Workers Scripts → Edit**)
   and `CLOUDFLARE_ACCOUNT_ID`.
 - The Worker's name in Cloudflare must match `name` in `wrangler.jsonc` (`jeremytondo-com`).
+- **Preview URLs** stay on through `"preview_urls": true` in `wrangler.jsonc`. Until the first
+  deploy from `main` applies that, the Worker's dashboard setting (Settings → Domains & Routes)
+  decides whether previews get URLs.
 - Workers Builds must stay disconnected (Worker → **Settings → Build → Git repository →
   Disconnect**), or Cloudflare runs its own failing build alongside this one.
 
