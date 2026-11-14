@@ -47,7 +47,7 @@ Uses Node 26 (`.node-version`). `npm install` also downloads Chromium for the PD
 npm install
 npm run dev        # http://localhost:4321 (no PDF in dev)
 npm run build      # site and PDF into dist/
-npm run preview    # serve dist/ (run build first)
+npm run preview    # serve dist/ the way Cloudflare does, headers included (run build first)
 npm test           # tests and type-check
 ```
 
@@ -59,15 +59,43 @@ tailscale serve --bg --https=8443 http://localhost:4321   # https://<machine>.<t
 tailscale serve --https=8443 off                          # to stop
 ```
 
-## Deploy: Cloudflare Pages
+## Deploy: Cloudflare Workers
 
-Connect the GitHub repo in Cloudflare Pages (Workers & Pages → Create → Pages → Connect to Git):
+The site deploys as a static-assets Worker (no Worker code). [`wrangler.jsonc`](wrangler.jsonc)
+points Cloudflare at `dist/`, and `public/_headers` sets the security headers.
 
-- Production branch: `main` (other branches get preview URLs)
-- Build command: `npm run build` (Chromium arrives via `npm install`'s postinstall step)
-- Output directory: `dist`
-- Node version comes from `.node-version`
+GitHub Actions builds and deploys it ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
+Cloudflare's own Workers Builds can't run the PDF step: its image lacks Chromium's system
+libraries and has no root to install them.
 
-Then add `jeremytondo.com` (and `www`) under the project's **Custom domains**. If the domain's DNS
-is already on Cloudflare, it creates the records; otherwise point the domain's nameservers at
-Cloudflare first.
+- **Pull requests:** `npm test` and `npm run build`. The resume PDF is uploaded as the
+  `resume-pdf` artifact on the run's summary page (kept 14 days) so you can check it before
+  merging. `wrangler versions upload` then uploads a preview version that serves no production
+  traffic, and a PR comment (updated on each push) links to it:
+  - a branch URL, `<branch>-jeremytondo-com.<subdomain>.workers.dev`, that always serves the
+    branch's latest push;
+  - a URL for that one commit.
+
+  PRs from forks skip the preview, since they don't get the repo secrets.
+- **Push to `main`:** the same, then `npx wrangler deploy` publishes `dist/`. To redeploy
+  without a commit, run the workflow by hand on `main` (Actions → CI → Run workflow).
+
+The workflow uses Node from `.node-version` and caches npm and Playwright's Chromium. On a cache
+hit the `postinstall` download does nothing, and `npx playwright install --with-deps chromium`
+only adds the system libraries.
+
+One-time setup:
+
+- Repo secrets `CLOUDFLARE_API_TOKEN` (an API token with **Account → Workers Scripts → Edit**)
+  and `CLOUDFLARE_ACCOUNT_ID`.
+- The Worker's name in Cloudflare must match `name` in `wrangler.jsonc` (`jeremytondo-com`).
+- `wrangler.jsonc` sets the Worker's `workers.dev` URLs, and each deploy from `main` applies
+  them: `"preview_urls": true` turns on preview URLs, and `"workers_dev": false` keeps the
+  production `jeremytondo-com.<subdomain>.workers.dev` URL off, so the site is served only on
+  its own domain. Until the first deploy, the toggles on the Worker's **Domains** tab decide.
+- Workers Builds must stay disconnected (Worker → **Settings → Build → Git repository →
+  Disconnect**), or Cloudflare runs its own failing build alongside this one.
+
+The custom domain `jeremytondo.com` is attached on the Worker's **Domains** tab (Add Domain), not
+in `wrangler.jsonc`, so deploys leave it alone and the API token needs no zone permissions. Add
+`www.jeremytondo.com` the same way if wanted.
