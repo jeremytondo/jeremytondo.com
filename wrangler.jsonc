@@ -5,8 +5,11 @@
   // Must match the Worker's name in the Cloudflare dashboard.
   "name": "jeremytondo-com",
   "compatibility_date": "2026-11-14",
-  // Per-version and per-branch preview URLs on workers.dev, uploaded by CI for each PR.
-  // Set explicitly because `wrangler deploy` leaves the dashboard setting alone otherwise.
+  // workers.dev URLs, applied on each `wrangler deploy` (both override the dashboard toggles).
+  // Production is served only on the custom domain (attached in the dashboard, not here),
+  // so the production workers.dev URL stays off; Wrangler would turn it on by default.
+  "workers_dev": false,
+  // Per-version and per-branch preview URLs, which CI uploads for each PR.
   "preview_urls": true,
   "assets": {
     "directory": "./dist"

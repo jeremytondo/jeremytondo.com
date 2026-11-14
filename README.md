@@ -89,12 +89,13 @@ One-time setup:
 - Repo secrets `CLOUDFLARE_API_TOKEN` (an API token with **Account → Workers Scripts → Edit**)
   and `CLOUDFLARE_ACCOUNT_ID`.
 - The Worker's name in Cloudflare must match `name` in `wrangler.jsonc` (`jeremytondo-com`).
-- **Preview URLs** stay on through `"preview_urls": true` in `wrangler.jsonc`. Until the first
-  deploy from `main` applies that, the Worker's dashboard setting (Settings → Domains & Routes)
-  decides whether previews get URLs.
+- `wrangler.jsonc` sets the Worker's `workers.dev` URLs, and each deploy from `main` applies
+  them: `"preview_urls": true` turns on preview URLs, and `"workers_dev": false` keeps the
+  production `jeremytondo-com.<subdomain>.workers.dev` URL off, so the site is served only on
+  its own domain. Until the first deploy, the toggles on the Worker's **Domains** tab decide.
 - Workers Builds must stay disconnected (Worker → **Settings → Build → Git repository →
   Disconnect**), or Cloudflare runs its own failing build alongside this one.
 
-Add `jeremytondo.com` (and `www.jeremytondo.com` if wanted) under the Worker's
-**Settings → Domains & Routes → Custom domain**. If the domain's DNS is already on Cloudflare, it
-creates the records; otherwise point the domain's nameservers at Cloudflare first.
+The custom domain `jeremytondo.com` is attached on the Worker's **Domains** tab (Add Domain), not
+in `wrangler.jsonc`, so deploys leave it alone and the API token needs no zone permissions. Add
+`www.jeremytondo.com` the same way if wanted.

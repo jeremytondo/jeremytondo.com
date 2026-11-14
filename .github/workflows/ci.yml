@@ -113,7 +113,7 @@ jobs:
           ### Preview
 
           Uploaded a preview version for \`${HEAD_SHA:0:7}\`, but Cloudflare returned no preview URL.
-          Turn on **Preview URLs** for the Worker (Settings → Domains & Routes)."
+          Turn on the **Preview** URL toggle on the Worker's **Domains** tab, then re-run this job."
           fi
           id=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --paginate \
             --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -n1)
