@@ -1,0 +1,30 @@
+---
+import markdown from '../../../resume.md?raw';
+import Base from '../../layouts/Base.astro';
+import { renderResume } from '../../lib/resume';
+import { site } from '../../site.config';
+import '../../styles/resume.css';
+
+const html = await renderResume(markdown, {
+  layouts: site.sectionLayouts,
+  pageBreaks: ['experience'],
+});
+
+const pdfHref = `/resume/${site.resume.pdfFilename}`;
+const built = new Date();
+const updated = built.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+
+<Base title={site.resume.title} description={site.resume.description} path="/resume/" type="profile">
+  <link slot="head" rel="alternate" type="application/pdf" href={pdfHref} title="Resume (PDF)" />
+  <div class="resume-shell">
+    <nav class="resume-bar" aria-label="Resume">
+      <a class="resume-bar__home" href="/">jeremytondo.com</a>
+      <span class="resume-bar__actions">
+        <time class="resume-bar__updated" datetime={built.toISOString()}>Updated {updated}</time>
+        <a class="resume-bar__pdf" href={pdfHref}>Download PDF</a>
+      </span>
+    </nav>
+    <main class="resume" set:html={html} />
+  </div>
+</Base>

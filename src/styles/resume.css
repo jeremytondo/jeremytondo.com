@@ -1,0 +1,406 @@
+/*
+ * Port of the "D3" resume design (Resume Template canvas): Letter paper,
+ * 48px × 60px margins, DM Sans. Selectors target the classes added by
+ * rehype-sectionize / rehype-resume, never heading text.
+ */
+
+/* ---- Screen chrome ---- */
+
+body:has(.resume-shell) {
+  background: var(--desk);
+}
+
+.resume-shell {
+  width: min(100%, 816px);
+  margin: 0 auto;
+  padding: 24px 0 64px;
+}
+
+.resume-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.resume-bar__home {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.resume-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.resume-bar__pdf {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+}
+.resume-bar__pdf:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+/* ---- The page ---- */
+
+.resume {
+  padding: 48px 60px;
+  background: var(--paper);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.06), 0 8px 24px rgb(16 24 40 / 0.08);
+}
+
+.resume :is(h1, h2, h3, p, ul) {
+  margin: 0;
+}
+
+.section--masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Masthead */
+
+.masthead__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.masthead__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.masthead__identity h1 {
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.masthead__tagline {
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.masthead__contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.masthead__summary {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* Section labels */
+
+.section[data-level='2'] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section[data-level='2'] > h2 {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.dates {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* What I Do: tinted panel, 2 × 2 grid */
+
+.section.section--skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 22px;
+  margin: 0 -24px;
+  padding: 22px 24px 24px;
+  background: var(--tint);
+  border-radius: 6px;
+}
+
+.section--skills > h2 {
+  grid-column: 1 / -1;
+  margin-bottom: -8px;
+}
+
+.section--skills > .section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.section--skills h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.section--skills p {
+  font-weight: 300;
+  color: var(--ink);
+}
+
+/* Where I've Been: org | roles | dates */
+
+.timeline {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 90px;
+  column-gap: 20px;
+  row-gap: 6px;
+  align-items: baseline;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline > li {
+  display: contents;
+}
+
+.timeline > li.timeline__plain {
+  display: block;
+  grid-column: 1 / -1;
+}
+
+.timeline__org {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.timeline__roles {
+  display: flex;
+  flex-direction: column;
+  color: var(--muted);
+}
+
+.timeline__dates {
+  font-size: inherit;
+  text-align: right;
+}
+
+/* What I've Accomplished */
+
+.section.section--experience {
+  gap: 24px;
+}
+
+.section--experience > .section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 2px;
+}
+
+.section--experience h3 {
+  font-size: 16.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.role {
+  color: var(--accent);
+}
+
+.section--experience ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 15px;
+}
+
+.section--experience li::marker {
+  color: var(--accent);
+}
+
+.section--experience ul + .role {
+  margin-top: 10px;
+}
+
+/* Print-only running head for page 2 */
+
+.running-head {
+  display: none;
+}
+
+/* ---- Small screens ---- */
+
+@media (max-width: 860px) {
+  .resume-shell {
+    padding: 16px 16px 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .resume-shell {
+    padding: 0 0 32px;
+  }
+  .resume-bar {
+    padding: 8px 16px;
+    margin: 0;
+  }
+  .resume {
+    padding: 32px 20px 40px;
+    box-shadow: none;
+  }
+  .masthead__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .masthead__identity h1 {
+    font-size: 34px;
+  }
+  .masthead__contact {
+    align-items: flex-start;
+  }
+  .section.section--skills {
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0 -20px;
+    padding: 22px 20px 24px;
+    border-radius: 0;
+  }
+  .timeline {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 2px;
+  }
+  .timeline > li {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: 0;
+    padding-bottom: 8px;
+  }
+  .timeline__org {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .timeline__dates {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 12.5px;
+  }
+  .timeline__roles {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .entry-head {
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+}
+
+/* ---- Print / PDF (Letter) ---- */
+
+/*
+ * 60px side margins in the design, split 36px page margin + 24px padding so
+ * the tinted panel (margin: 0 -24px) has room to bleed and isn't clipped.
+ */
+@page {
+  size: letter;
+  margin: 48px 36px;
+}
+
+@media print {
+  body,
+  body:has(.resume-shell) {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .resume-shell {
+    width: auto;
+    padding: 0;
+  }
+  .resume-bar {
+    display: none;
+  }
+  .resume {
+    padding: 0 24px;
+    box-shadow: none;
+  }
+  .section--page-break {
+    break-before: page;
+  }
+  .running-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 4px;
+  }
+  .running-head__name {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+  }
+  .running-head__page {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .section--experience > .section > h3,
+  .entry-head,
+  .role {
+    break-after: avoid;
+  }
+  .resume li,
+  .section--skills > .section {
+    break-inside: avoid;
+  }
+  /* At true Letter scale page 2 runs ~25px long; trim spacing, not type. */
+  .section.section--experience {
+    gap: 20px;
+  }
+  .section--experience ul {
+    gap: 4px;
+    line-height: 1.46;
+  }
+  .section--experience ul + .role {
+    margin-top: 8px;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

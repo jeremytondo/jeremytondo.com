@@ -1,0 +1,42 @@
+---
+import '@fontsource-variable/dm-sans/opsz.css';
+import '../styles/base.css';
+import { site } from '../site.config';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path of this page, e.g. "/resume/". */
+  path: string;
+  type?: 'website' | 'profile';
+}
+
+const { title, description, path, type = 'website' } = Astro.props;
+const canonical = new URL(path, site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
