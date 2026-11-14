@@ -47,7 +47,7 @@ Uses Node 26 (`.node-version`). `npm install` also downloads Chromium for the PD
 npm install
 npm run dev        # http://localhost:4321 (no PDF in dev)
 npm run build      # site and PDF into dist/
-npm run preview    # serve dist/ (run build first)
+npm run preview    # serve dist/ the way Cloudflare does, headers included (run build first)
 npm test           # tests and type-check
 ```
 
@@ -59,15 +59,19 @@ tailscale serve --bg --https=8443 http://localhost:4321   # https://<machine>.<t
 tailscale serve --https=8443 off                          # to stop
 ```
 
-## Deploy: Cloudflare Pages
+## Deploy: Cloudflare Workers
 
-Connect the GitHub repo in Cloudflare Pages (Workers & Pages → Create → Pages → Connect to Git):
+The site deploys as a static-assets Worker (no Worker code). [`wrangler.jsonc`](wrangler.jsonc)
+points Cloudflare at `dist/`, and `public/_headers` sets the security headers.
 
-- Production branch: `main` (other branches get preview URLs)
+Connect the GitHub repo once (Workers & Pages → Create → Import a repository):
+
+- Project name: `jeremytondo-com` (must match `name` in `wrangler.jsonc`)
 - Build command: `npm run build` (Chromium arrives via `npm install`'s postinstall step)
-- Output directory: `dist`
+- Deploy command: `npx wrangler deploy` (the default)
+- Production branch: `main` (other branches get preview URLs)
 - Node version comes from `.node-version`
 
-Then add `jeremytondo.com` (and `www`) under the project's **Custom domains**. If the domain's DNS
-is already on Cloudflare, it creates the records; otherwise point the domain's nameservers at
-Cloudflare first.
+Then add `jeremytondo.com` (and `www.jeremytondo.com` if wanted) under the Worker's
+**Settings → Domains & Routes → Custom domain**. If the domain's DNS is already on Cloudflare, it
+creates the records; otherwise point the domain's nameservers at Cloudflare first.
