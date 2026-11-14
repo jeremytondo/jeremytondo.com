@@ -64,14 +64,28 @@ tailscale serve --https=8443 off                          # to stop
 The site deploys as a static-assets Worker (no Worker code). [`wrangler.jsonc`](wrangler.jsonc)
 points Cloudflare at `dist/`, and `public/_headers` sets the security headers.
 
-Connect the GitHub repo once (Workers & Pages → Create → Import a repository):
+GitHub Actions builds and deploys it ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
+Cloudflare's own Workers Builds can't run the PDF step: its image lacks Chromium's system
+libraries and has no root to install them.
 
-- Project name: `jeremytondo-com` (must match `name` in `wrangler.jsonc`)
-- Build command: `npm run build` (Chromium arrives via `npm install`'s postinstall step)
-- Deploy command: `npx wrangler deploy` (the default)
-- Production branch: `main` (other branches get preview URLs)
-- Node version comes from `.node-version`
+- **Pull requests:** `npm test` and `npm run build`. The resume PDF is uploaded as the
+  `resume-pdf` artifact on the run's summary page (kept 14 days) so you can check it before
+  merging.
+- **Push to `main`:** the same, then `npx wrangler deploy` publishes `dist/`. To redeploy
+  without a commit, run the workflow by hand on `main` (Actions → CI → Run workflow).
 
-Then add `jeremytondo.com` (and `www.jeremytondo.com` if wanted) under the Worker's
+The workflow uses Node from `.node-version` and caches npm and Playwright's Chromium. On a cache
+hit the `postinstall` download does nothing, and `npx playwright install --with-deps chromium`
+only adds the system libraries.
+
+One-time setup:
+
+- Repo secrets `CLOUDFLARE_API_TOKEN` (an API token with **Account → Workers Scripts → Edit**)
+  and `CLOUDFLARE_ACCOUNT_ID`.
+- The Worker's name in Cloudflare must match `name` in `wrangler.jsonc` (`jeremytondo-com`).
+- Workers Builds must stay disconnected (Worker → **Settings → Build → Git repository →
+  Disconnect**), or Cloudflare runs its own failing build alongside this one.
+
+Add `jeremytondo.com` (and `www.jeremytondo.com` if wanted) under the Worker's
 **Settings → Domains & Routes → Custom domain**. If the domain's DNS is already on Cloudflare, it
 creates the records; otherwise point the domain's nameservers at Cloudflare first.
