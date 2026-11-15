@@ -266,9 +266,38 @@ body:has(.resume-shell) {
 
 /* ---- Small screens ---- */
 
-@media (max-width: 860px) {
+/*
+ * Tablets: the page is narrower than Letter, so give back some side margin
+ * and size the timeline's org and date columns to their content, leaving
+ * the roles column the rest of the row. Contact lines never break mid-line.
+ */
+@media screen and (max-width: 860px) {
   .resume-shell {
     padding: 16px 16px 48px;
+  }
+  .resume {
+    padding: 48px 40px;
+  }
+  .masthead__contact > * {
+    white-space: nowrap;
+  }
+  .timeline {
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+  }
+}
+
+/*
+ * Narrow tablets (and zoomed-in browsers): the name and the contact block no
+ * longer fit side by side, so stack them instead of squeezing both.
+ */
+@media screen and (max-width: 720px) {
+  .masthead__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .masthead__contact {
+    align-items: flex-start;
   }
 }
 
@@ -284,16 +313,11 @@ body:has(.resume-shell) {
     padding: 32px 20px 40px;
     box-shadow: none;
   }
-  .masthead__head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
   .masthead__identity h1 {
     font-size: 34px;
   }
-  .masthead__contact {
-    align-items: flex-start;
+  .masthead__contact > * {
+    white-space: normal;
   }
   .section.section--skills {
     grid-template-columns: minmax(0, 1fr);
