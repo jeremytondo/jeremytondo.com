@@ -4,7 +4,7 @@
 
 Chicago, IL | jmargari@gmail.com | linkedin.com/in/jeremytondo
 
-I'm a creative technologist and leader who turns ambitious ideas into products and experiences that have been used by more than a billion people. Over 25+ years, from front-end engineer to Senior UX Engineering Manager at Google, I've built teams and brought product, engineering, and creative partners together to create work people love.
+I'm a creative technologist and leader who turns ambitious ideas into products and experiences that have been used by more than a billion people. Over 25 years, from front-end engineer to Senior UX Engineering Manager at Google, I've built teams and brought product, engineering, and creative partners together to create work people love.
 
 ## What I Do
 
@@ -65,11 +65,9 @@ I've always had a knack for being a translator between technical, creative, and 
 - Managed Digitas's technology relationship with MillerCoors across its portfolio of beer brands, overseeing hosting infrastructure, brand sites, and shared components and tools reused across high-traffic campaigns.
 - As engineering consultant for Disney's Let the Memories Begin campaign, pulled together Disney's requirements and coordinated with various vendors to build and launch a user-generated photo-sharing platform on a very short timeline.
 
-### Stealth-Mode Startup (Confidential until launch)
+### Side Projects
 
-**Partner, Engineering & Product Lead**
+To keep my skills sharp and pursue causes I care about, I have some side projects. For example:
 
-A mission-driven startup leveling the playing field for young people starting careers on nontraditional paths.
-
-- Built the engineering team and lead development of the company's application.
-- Lead product, working with the other partners to shape ideas into concrete plans and shipped features.
+- Partner and engineering lead at an early-stage startup helping young people start careers on nontraditional paths.
+- For 10 years, I've built a personal app that uses machine learning to analyze March Madness games.
