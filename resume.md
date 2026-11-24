@@ -10,19 +10,19 @@ I'm a creative technologist and leader who turns ambitious ideas into products a
 
 ### Lead Teams
 
-I love building and leading teams. My approach is simple: bring talented people together, set a clear direction, remove roadblocks, and give them the freedom and support to work their magic.
+I bring talented people together, set a clear direction, remove roadblocks, and give them the freedom and support to work their magic.
 
 ### Solve Problems
 
-I have a knack for taking complicated, sometimes messy problems and finding a way forward. I like understanding how all the pieces fit together, getting to the heart of the challenge, and working with others to build practical, thoughtful solutions.
+I take complicated, sometimes messy problems and work with others to find practical, thoughtful solutions.
 
 ### Get Creative
 
-I'm a creative technologist at heart. I help teams explore what's possible, push ideas beyond the obvious, and figure out how to turn even the wildest concepts into something real.
+I help teams explore what's possible, push ideas beyond the obvious, and figure out how to turn even the wildest concepts into something real.
 
 ### Connect the Dots
 
-I've always had a knack for being a translator between technical, creative, and business teams. I help people understand different perspectives, find common ground, and work together to make great things happen.
+I help technical, creative, and business teams understand each other by connecting what's possible, what matters, and what we're trying to achieve.
 
 ## Where I've Been
 
@@ -44,11 +44,13 @@ I've always had a knack for being a translator between technical, creative, and 
 - Led a cross-team redesign of how Google serves Doodles across web, iOS, Android, Chrome, and Pixel, improving reliability, efficiency, and adding a CMS that lets artists and testers organize, preview, and test assets before launch.
 - Led UX engineering for interactive Google Doodles, including the [2025 Halloween Pac-Man game](https://doodles.google/doodle/pac-man-halloween-2025-edition/), and playful Search experiences like [Northern Lights](https://www.google.com/search?q=northern+lights).
 - Pioneered the team's transition to agentic coding, bringing AI into our development workflows and shaving months off the development of Search easter eggs and interactive Doodles.
+- Partnered with Google DeepMind to personally build an internal tool that uses an experimental AI model for video outpainting and logo removal, now used to help edit Google's annual Year in Search video.
 
 **Global Agency Technical Liaison Lead**
 
 - Founded and grew a global team that let Google Marketing launch agency-built sites meeting Google's engineering, security, and privacy standards.
 - Vetted and trained agencies and built an approval process marketers could easily follow; the program has supported thousands of launches and became an example for Google Security.
+- Led the engineering team behind the component library for Google Marketing's design system, helping internal teams and agencies ship sites that met brand, accessibility, and security standards.
 - Managed Google Marketing's $2M+ technical infrastructure budget.
 
 ### Digitas San Francisco (2012-2014)
@@ -62,8 +64,8 @@ I've always had a knack for being a translator between technical, creative, and 
 
 **Technical Program Manager**
 
-- Managed Digitas's technology relationship with MillerCoors across its portfolio of beer brands, overseeing hosting infrastructure, brand sites, and shared components and tools reused across high-traffic campaigns.
-- As engineering consultant for Disney's Let the Memories Begin campaign, pulled together Disney's requirements and coordinated with various vendors to build and launch a user-generated photo-sharing platform on a very short timeline.
+- Managed Digitas's technology relationship with MillerCoors across its portfolio of beer brands, overseeing hosting infrastructure, brand sites, and shared components and tools used across high-traffic campaigns.
+- Led engineering for Disney's Let the Memories Begin campaign. Translated Disney's requirements into a technical plan and coordinated the build and launch of a user-generated photo-sharing platform.
 
 ### Side Projects
 
