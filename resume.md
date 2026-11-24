@@ -41,7 +41,7 @@ I help technical, creative, and business teams understand each other by connecti
 **Senior UX Engineering Manager**
 
 - Led Google's Brand Studio UX Engineering team, which built properties like about.google and blog.google, each serving more than 20 million monthly visitors.
-- Led a cross-team redesign of how Google serves Doodles across web, iOS, Android, Chrome, and Pixel, improving reliability, efficiency, and adding a CMS that lets artists and testers organize, preview, and test assets before launch.
+- Led a cross-team redesign of how Google serves Doodles across web, iOS, Android, Chrome, and Pixel, improving reliability and efficiency and adding a CMS for artists to preview and test assets before launch.
 - Led UX engineering for interactive Google Doodles, including the [2025 Halloween Pac-Man game](https://doodles.google/doodle/pac-man-halloween-2025-edition/), and playful Search experiences like [Northern Lights](https://www.google.com/search?q=northern+lights).
 - Pioneered the team's transition to agentic coding, bringing AI into our development workflows and shaving months off the development of Search easter eggs and interactive Doodles.
 - Partnered with Google DeepMind to personally build an internal tool that uses an experimental AI model for video outpainting and logo removal, now used to help edit Google's annual Year in Search video.
@@ -57,7 +57,7 @@ I help technical, creative, and business teams understand each other by connecti
 
 **VP, Director of Technology**
 
-- Led technology for the opening of Digitas's San Francisco office, building and managing its creative technology team.
+- Led technology for Digitas's new San Francisco office and built its creative technology team.
 - Delivered fast-paced, inventive work for the office's clients. For example, architected the technology solution behind Taco Bell's 2014 Breakfast Phone campaign.
 
 ### Digitas Chicago (2006-2012)
@@ -71,5 +71,5 @@ I help technical, creative, and business teams understand each other by connecti
 
 To keep my skills sharp and pursue causes I care about, I have some side projects. For example:
 
-- Partner and engineering lead at an early-stage startup helping young people start careers on nontraditional paths.
+- Partner and engineering lead at a startup helping young people start careers on nontraditional paths.
 - For 10 years, I've built a personal app that uses machine learning to analyze March Madness games.
