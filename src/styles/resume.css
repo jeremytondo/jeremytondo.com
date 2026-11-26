@@ -412,16 +412,20 @@ body:has(.resume-shell) {
   .section--skills > .section {
     break-inside: avoid;
   }
-  /* At true Letter scale page 2 runs ~25px long; trim spacing, not type. */
+  /*
+   * Page 2 (What I've Accomplished) has to fit one Letter page. Trim spacing,
+   * not type, and trim every gap a little rather than one gap a lot, so the
+   * rhythm matches the screen version. About 28px to spare as of Nov 2026.
+   */
   .section.section--experience {
-    gap: 20px;
+    gap: 16px;
   }
   .section--experience ul {
-    gap: 4px;
-    line-height: 1.46;
+    gap: 3px;
+    line-height: 1.43;
   }
   .section--experience ul + .role {
-    margin-top: 8px;
+    margin-top: 6px;
   }
   a {
     color: inherit;

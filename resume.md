@@ -69,7 +69,7 @@ I help technical, creative, and business teams understand each other by connecti
 
 ### Side Projects
 
-To keep my skills sharp and pursue causes I care about, I have some side projects. For example:
+To keep my skills sharp and pursue causes I care about, I work on side projects:
 
 - Partner and engineering lead at a startup helping young people start careers on nontraditional paths.
-- For 10 years, I've built a personal app that uses machine learning to analyze March Madness games.
+- A steady stream of personal projects, some hand-coded and some built with AI, from a machine learning March Madness iOS app to a keyboard-driven macOS workflow tool and a three-node Proxmox home lab.
