@@ -6,8 +6,7 @@ export const site = {
   url: 'https://jeremytondo.com',
   name: 'Jeremy Margaritondo',
   tagline: 'Creative Technologist & Leader',
-  // TODO: replace with the real profile URL.
-  linkedin: 'https://www.linkedin.com/in/your-name',
+  linkedin: 'https://www.linkedin.com/in/jeremytondo/',
 
   resume: {
     title: 'Jeremy Margaritondo — Resume',
