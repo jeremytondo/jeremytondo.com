@@ -1,0 +1,12 @@
+---
+/** A terminal prompt line: an accent `$` and the command. */
+interface Props {
+  command: string;
+  as?: 'p' | 'h2';
+  id?: string;
+}
+
+const { command, as: Tag = 'p', id } = Astro.props;
+---
+
+<Tag class="prompt" id={id}><span class="prompt__sigil" aria-hidden="true">$</span> {command}</Tag>

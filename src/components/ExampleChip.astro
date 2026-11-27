@@ -1,0 +1,21 @@
+---
+import type { Example } from '../lib/home';
+
+interface Props {
+  example: Example;
+}
+
+const { example } = Astro.props;
+const external = example.href !== null && /^https?:\/\//.test(example.href);
+---
+
+{
+  example.href !== null ? (
+    <a class="chip" href={example.href}>
+      <Fragment set:html={example.labelHtml} />
+      {external && <span aria-hidden="true">↗</span>}
+    </a>
+  ) : (
+    <span class="chip chip--muted" set:html={example.labelHtml} />
+  )
+}

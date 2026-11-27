@@ -1,0 +1,26 @@
+---
+import type { WorkEntry } from '../lib/home';
+import ExampleChip from './ExampleChip.astro';
+
+interface Props {
+  entry: WorkEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<li class="entry">
+  <h3 class="entry__title" set:html={entry.titleHtml} />
+  {entry.bodyHtml && <div class="entry__body prose" set:html={entry.bodyHtml} />}
+  {
+    entry.examples.length > 0 && (
+      <ul class="entry__examples">
+        {entry.examples.map((example) => (
+          <li>
+            <ExampleChip example={example} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</li>

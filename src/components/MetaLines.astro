@@ -1,0 +1,23 @@
+---
+import type { MetaLine } from '../lib/home';
+
+interface Props {
+  lines: MetaLine[];
+}
+
+const { lines } = Astro.props;
+---
+
+<ul class="meta">
+  {
+    lines.map((line) =>
+      line.key ? (
+        <li class="meta__pair">
+          <span class="meta__key">{line.key}</span> <span class="meta__value" set:html={line.valueHtml} />
+        </li>
+      ) : (
+        <li class="meta__plain" set:html={line.valueHtml} />
+      ),
+    )
+  }
+</ul>

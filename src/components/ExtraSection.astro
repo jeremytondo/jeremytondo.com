@@ -1,0 +1,15 @@
+---
+import type { ExtraSection } from '../lib/home';
+
+/** A home.md section with no layout of its own: heading and content, plainly. */
+interface Props {
+  section: ExtraSection;
+}
+
+const { section } = Astro.props;
+---
+
+<section class="extra">
+  {section.headingHtml && <h2 class="extra__title" set:html={section.headingHtml} />}
+  {section.html && <div class="prose" set:html={section.html} />}
+</section>
