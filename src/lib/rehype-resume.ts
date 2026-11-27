@@ -1,5 +1,6 @@
-import type { Element, ElementContent, Root, Text } from 'hast';
+import type { Element, ElementContent, Root } from 'hast';
 import { toString } from 'hast-util-to-string';
+import { allText, classes, hasClass, isElement, listItemContent, meaningful, text, TRAILING_PAREN } from './hast.ts';
 
 /**
  * Resume-specific touches on top of rehype-sectionize. Each one matches a
@@ -31,23 +32,9 @@ const el = (
   children,
 });
 
-const text = (value: string): Text => ({ type: 'text', value });
-
-const isBlank = (node: ElementContent) => node.type === 'text' && !node.value.trim();
-const meaningful = (nodes: ElementContent[]) => nodes.filter((n) => !isBlank(n) && n.type !== 'comment');
-
-const classes = (node: Element): string[] => {
-  const value = node.properties?.className;
-  if (Array.isArray(value)) return value.map(String);
-  return typeof value === 'string' ? (value as string).split(' ') : [];
-};
-const hasClass = (node: Element, name: string) => classes(node).includes(name);
 const addClass = (node: Element, name: string) => {
   node.properties = { ...node.properties, className: [...classes(node), name] };
 };
-
-const isElement = (node: ElementContent | undefined, tagName?: string): node is Element =>
-  node?.type === 'element' && (!tagName || node.tagName === tagName);
 
 /** A paragraph whose only content is one <strong>. */
 const boldOnly = (node: ElementContent): Element | null => {
@@ -56,10 +43,6 @@ const boldOnly = (node: ElementContent): Element | null => {
   return kids.length === 1 && isElement(kids[0], 'strong') ? kids[0] : null;
 };
 
-const allText = (nodes: ElementContent[]): nodes is Text[] => nodes.every((n) => n.type === 'text');
-
-/** `Title (dates)` → [title, dates]. */
-const TRAILING_PAREN = /^(.*?\S)\s*\(([^()]+)\)\s*$/;
 /** ` - Role; Role (dates)` after the bold org name. */
 const TIMELINE_REST = /^\s*[-–—:]\s*(.*?)\s*(?:\(([^()]+)\))?\s*$/;
 
@@ -119,11 +102,7 @@ function timeline(section: Element) {
     addClass(list, 'timeline');
     for (const item of list.children) {
       if (!isElement(item, 'li')) continue;
-      // Tight lists put inline content straight in <li>; loose ones wrap it in <p>.
-      let inline = meaningful(item.children);
-      if (inline.length === 1 && isElement(inline[0], 'p')) inline = meaningful(inline[0].children);
-
-      const [org, ...rest] = inline;
+      const [org, ...rest] = listItemContent(item);
       const match = isElement(org, 'strong') && allText(rest)
         ? TIMELINE_REST.exec(rest.map((r) => r.value).join(''))
         : null;

@@ -1,0 +1,38 @@
+---
+import { site } from '../site.config';
+import Prompt from './Prompt.astro';
+
+interface Props {
+  /** The contact section of home.md, as HTML. */
+  contactHtml: string | null;
+}
+
+const { contactHtml } = Astro.props;
+const links = [
+  { label: 'email', href: `mailto:${site.email}` },
+  { label: 'linkedin', href: site.linkedin, arrow: true, rel: 'me' },
+  { label: 'github', href: site.github, arrow: true, rel: 'me' },
+  { label: 'resume', href: '/resume/' },
+];
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="site-footer" id="contact">
+  <Prompt command="contact --jeremy" />
+  {contactHtml && <div class="contact-line" set:html={contactHtml} />}
+  <div class="site-footer__bottom">
+    <ul class="site-footer__links">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} rel={link.rel}>
+              {link.label}
+              {link.arrow && <span aria-hidden="true">↗</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="site-footer__note">© {year}</p>
+  </div>
+</footer>

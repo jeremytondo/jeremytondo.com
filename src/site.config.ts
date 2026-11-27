@@ -1,12 +1,25 @@
 /**
  * Site-level settings. Everything about presentation lives here or in
- * templates/CSS — never in resume.md, which stays plain markdown.
+ * templates/CSS — never in resume.md or home.md, which stay plain markdown.
  */
 export const site = {
   url: 'https://jeremytondo.com',
   name: 'Jeremy Margaritondo',
   tagline: 'Creative Technologist & Leader',
   linkedin: 'https://www.linkedin.com/in/jeremytondo/',
+  github: 'https://github.com/jeremytondo',
+  email: 'jmargari@gmail.com',
+
+  home: {
+    title: 'Jeremy Margaritondo | Creative Technologist & Leader',
+    description:
+      'Creative technologist and leader. 25+ years turning ambitious ideas into products and experiences used by more than a billion people.',
+    /** Same idea as `sectionLayouts` below, for home.md. */
+    sectionLayouts: {
+      1: ['hero'],
+      2: ['work', 'now', 'contact'],
+    } as Record<number, string[]>,
+  },
 
   resume: {
     title: 'Jeremy Margaritondo — Resume',

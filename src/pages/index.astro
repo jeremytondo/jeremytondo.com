@@ -1,17 +1,30 @@
 ---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import markdown from '../../home.md?raw';
+import ExtraSection from '../components/ExtraSection.astro';
+import Hero from '../components/Hero.astro';
+import NowPanel from '../components/NowPanel.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import WorkLog from '../components/WorkLog.astro';
 import Base from '../layouts/Base.astro';
+import { renderHome } from '../lib/home';
 import { site } from '../site.config';
+import '../styles/home.css';
+
+const home = await renderHome(markdown, { layouts: site.home.sectionLayouts });
 ---
 
-<Base title={site.name} description={`${site.name} — ${site.tagline}.`} path="/">
-  <main class="card-page">
-    <div class="card">
-      <h1 class="card__name">{site.name}</h1>
-      <p class="card__tagline">{site.tagline}</p>
-      <ul class="card__links">
-        <li><a href="/resume/">Resume</a></li>
-        <li><a href={site.linkedin} rel="me">LinkedIn</a></li>
-      </ul>
-    </div>
-  </main>
+<Base title={site.home.title} description={site.home.description} path="/">
+  <div class="home">
+    <SiteHeader anchors={{ work: !!home.work, now: !!home.now }} />
+    <main>
+      {home.hero && <Hero hero={home.hero} />}
+      {home.work && <WorkLog work={home.work} />}
+      {home.now && <NowPanel now={home.now} />}
+      {home.extra.map((section) => <ExtraSection section={section} />)}
+    </main>
+    <SiteFooter contactHtml={home.contactHtml} />
+  </div>
 </Base>

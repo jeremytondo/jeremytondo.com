@@ -1,0 +1,23 @@
+---
+interface Props {
+  /** In-page anchors that exist, so the nav never links to a missing section. */
+  anchors: { work: boolean; now: boolean };
+}
+
+const { anchors } = Astro.props;
+const links = [
+  anchors.work && { label: 'work', href: '#work' },
+  anchors.now && { label: 'now', href: '#now' },
+  { label: 'resume', href: '/resume/' },
+  { label: 'contact', href: '#contact' },
+].filter((link) => !!link);
+---
+
+<header class="site-header">
+  <a class="site-header__home" href="/"><span class="site-header__tilde">~/</span>jeremy-margaritondo</a>
+  <nav class="site-header__nav" aria-label="Primary">
+    <ul>
+      {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,30 @@
+---
+import type { Hero } from '../lib/home';
+import MetaLines from './MetaLines.astro';
+import Prompt from './Prompt.astro';
+
+interface Props {
+  hero: Hero;
+}
+
+const { hero } = Astro.props;
+// The cursor sits after the last line of output: the lede if there is one, else the headline.
+const last = hero.lede.length - 1;
+---
+
+<section class="hero">
+  <Prompt command="whoami" />
+  <h1 class="hero__headline">
+    <Fragment set:html={hero.headlineHtml} />{last < 0 && <span class="caret" aria-hidden="true"></span>}
+  </h1>
+  {
+    hero.lede.map((html, index) => (
+      <p class="hero__lede">
+        <Fragment set:html={html} />
+        {index === last && <span class="caret caret--block" aria-hidden="true" />}
+      </p>
+    ))
+  }
+  {hero.meta.length > 0 && <MetaLines lines={hero.meta} />}
+  {hero.restHtml && <div class="hero__rest prose" set:html={hero.restHtml} />}
+</section>

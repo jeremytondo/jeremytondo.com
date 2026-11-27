@@ -1,0 +1,44 @@
+---
+import type { Now } from '../lib/home';
+
+interface Props {
+  now: Now;
+}
+
+const { now } = Astro.props;
+/** `https://github.com/a/b/` → `github.com/a/b` for the link line. */
+const display = (href: string) => href.replace(/^[a-z]+:(\/\/)?/i, '').replace(/\/$/, '');
+/** `go · fedora bootc · mise` → one muted pill per tool, so the list never wraps mid-item. */
+const tools = (stack: string) => stack.split(/\s*[·,]\s*/).filter(Boolean);
+// With no `###` panel, the intro text still gets a panel of its own.
+const items = now.items.length ? now.items : [null];
+---
+
+{
+  items.map((item, index) => (
+    <section class="now" id={index === 0 ? 'now' : undefined}>
+      <p class="now__label">
+        <span class="now__dot" aria-hidden="true">●</span> now building
+      </p>
+      {index === 0 && now.introHtml && <div class="now__body prose" set:html={now.introHtml} />}
+      {item && (
+        <h2 class="now__title">
+          {item.href ? <a href={item.href} set:html={item.titleHtml} /> : <Fragment set:html={item.titleHtml} />}
+        </h2>
+      )}
+      {item?.bodyHtml && <div class="now__body prose" set:html={item.bodyHtml} />}
+      {item?.stack && (
+        <ul class="now__stack" aria-label="Stack">
+          {tools(item.stack).map((tool) => (
+            <li class="chip chip--muted">{tool}</li>
+          ))}
+        </ul>
+      )}
+      {item?.href && (
+        <a class="now__link" href={item.href}>
+          {display(item.href)} <span aria-hidden="true">↗</span>
+        </a>
+      )}
+    </section>
+  ))
+}

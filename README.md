@@ -1,11 +1,11 @@
 # jeremytondo.com
 
-Astro static site. The resume at `/resume/` and its PDF are both generated from
-[`resume.md`](resume.md) on every build.
+Astro static site. The home page is generated from [`home.md`](home.md), and the resume at
+`/resume/` and its PDF from [`resume.md`](resume.md), on every build.
 
 ```
 dist/
-  index.html                       ← placeholder card: name, resume, LinkedIn
+  index.html                       ← home page (Night Shift design)
   resume/index.html
   resume/jeremytondo-resume.pdf   ← stable URL; never rename
 ```
@@ -27,12 +27,40 @@ Lines that don't match a pattern render as plain text; the build never fails on 
 Positions are mapped in `src/site.config.ts` (`sectionLayouts`), alongside the page title,
 meta description, LinkedIn URL and PDF filename.
 
+## Editing the home page
+
+Edit `home.md` and push to `main`. Same rules as the resume: plain markdown, no front matter or
+custom syntax, and layout comes from heading position, so headings and entries can be reworded
+or reordered freely:
+
+| Markdown | Rendered as |
+| --- | --- |
+| `#` line | Hero headline |
+| Paragraph right after `#` | Lede under the headline; the template adds the blinking cursor at its end (or after the headline if there's no lede) |
+| List right after those, items `key: value` | Meta lines (`role`, `at`, `uptime`) |
+| 1st `##` | Work log; the heading text isn't shown, the template prints `$ git log --selected` and the entry count |
+| `### Title` under the 1st `##` | One entry |
+| Paragraph under an entry | One-liner |
+| List under an entry | Example pills: a linked item is a link pill, a plain item (`internal only`) a muted pill; no list, no pills |
+| 2nd `##` with one `### [Title](url) (stack)` | Now building panel: title links to the repo, the `·`-separated stack in the parentheses is listed one per line, paragraph is the body |
+| 3rd `##` | Contact line; a link in it renders in the accent color |
+| Any further `##` | Plain heading and text |
+
+Lines that don't match a pattern render as plain text; the build never fails on content. The
+terminal prompts, the `● now building` label, the header nav, footer links and note live in
+the templates (`src/components/`); positions, the page title and description, email, LinkedIn
+and GitHub URLs live in `src/site.config.ts` (`home`).
+
 ## How it works
 
 - `src/lib/rehype-sectionize.ts` wraps each heading and its content in nested `<section>`s
   and assigns layouts by heading position.
 - `src/lib/rehype-resume.ts` splits existing patterns (`(dates)`, `Org - Role`, `a | b`) into
   elements the CSS can place.
+- `src/lib/home.ts` reads the same sections from `home.md` into data for the home page
+  components in `src/components/`; `src/styles/home.css` is the port of the **Night Shift**
+  design (jeremytondo.com Portfolio canvas). Geist and Geist Mono are self-hosted via
+  `@fontsource-variable`, and the page ships no JavaScript.
 - `src/styles/resume.css` is the port of the **D3** design (Resume Template canvas), including
   `@page` / print rules for Letter paper.
 - `scripts/build-pdf.mjs` runs after `astro build`: it serves `dist/`, prints `/resume/` with

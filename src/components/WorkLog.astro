@@ -1,0 +1,29 @@
+---
+import type { Work } from '../lib/home';
+import ProgramEntry from './ProgramEntry.astro';
+import Prompt from './Prompt.astro';
+
+interface Props {
+  work: Work;
+}
+
+const { work } = Astro.props;
+const count = work.entries.length;
+---
+
+<section class="work" id="work" aria-labelledby="work-title">
+  <div class="work__head">
+    <Prompt as="h2" id="work-title" command="git log --selected" />
+    <span class="work__count">{count} {count === 1 ? 'entry' : 'entries'}</span>
+  </div>
+  {work.introHtml && <div class="work__intro prose" set:html={work.introHtml} />}
+  {
+    count > 0 && (
+      <ol class="work__entries">
+        {work.entries.map((entry) => (
+          <ProgramEntry entry={entry} />
+        ))}
+      </ol>
+    )
+  }
+</section>
